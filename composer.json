@@ -1,0 +1,34 @@
+{
+    "name": "kavi/site-editor",
+    "description": "Local webpage editor Laravel package",
+    "keywords": [
+        "laravel",
+        "package"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kavi\\SiteEditor\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kaviyarasu M"
+        }
+    ],
+    "require": {
+        "php": "^8.0.2",
+        "illuminate/support": "^9.2.0",
+        "illuminate/http": "^9.2.0"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php artisan vendor:publish --tag=public --force"
+        ],
+        "post-update-cmd": [
+            "php artisan vendor:publish --tag=public --force"
+        ]
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
