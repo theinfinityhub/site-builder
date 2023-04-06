@@ -1,5 +1,5 @@
 {
-    "name": "kavi/site-editor",
+    "name": "1clx/site-builder",
     "description": "Local webpage editor Laravel package",
     "keywords": [
         "laravel",
@@ -8,12 +8,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Kavi\\SiteEditor\\": "src/"
+            "1clx\\SiteEditor\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "Kaviyarasu M"
+            "name": "1CLX"
         }
     ],
     "require": {
