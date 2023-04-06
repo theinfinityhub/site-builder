@@ -1,6 +1,6 @@
 <?php
 
-namespace Kavi\SiteEditor;
+namespace 1clx\SiteBuilder;
 
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Support\Facades\Route;

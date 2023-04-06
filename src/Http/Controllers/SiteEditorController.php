@@ -1,6 +1,6 @@
 <?php
 
-namespace Kavi\SiteEditor\Http\Controllers;
+namespace 1clx\SiteBuilder\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

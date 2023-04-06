@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Kavi\SiteEditor\Http\Controllers\SiteEditorController;
+use 1clx\SiteBuilder\Http\Controllers\SiteEditorController;
 
 
 Route::middleware(['web', 'csrf', 'role:pcx', 'editor'])->controller(SiteEditorController::class)->group(function () {

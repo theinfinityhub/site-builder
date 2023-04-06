@@ -1,6 +1,6 @@
 <?php
 
-namespace Kavi\SiteEditor\Http\Middleware;
+namespace 1clx\SiteBuilder\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
