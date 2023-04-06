@@ -4,12 +4,7 @@ namespace Kavi\SiteEditor\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Business;
-use App\Models\SiteEditor;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class SiteEditorController extends Controller
@@ -80,9 +75,9 @@ class SiteEditorController extends Controller
     public function save(Request $request, $business)
     {
         $html = $this->sanitizeFileName($request->input('html'));
-        
+
         $user = auth()->user()->business()->first();
-        
+
         $user->site_editor()->updateOrCreate(
             ['user_id' => auth()->id()],
             [
