@@ -1,6 +1,6 @@
 <?php
 
-namespace 1clx\SiteBuilder\Http\Middleware;
+namespace OneClx\SiteBuilder\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

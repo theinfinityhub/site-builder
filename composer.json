@@ -1,5 +1,5 @@
 {
-    "name": "1clx/site-builder",
+    "name": "oneclx/site-builder",
     "description": "Local webpage editor Laravel package",
     "keywords": [
         "laravel",
@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "1clx\\SiteBuilder\\": "src/"
+            "OneClx\\SiteBuilder\\": "src/"
         }
     },
     "authors": [

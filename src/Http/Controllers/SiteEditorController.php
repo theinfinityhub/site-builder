@@ -1,6 +1,6 @@
 <?php
 
-namespace 1clx\SiteBuilder\Http\Controllers;
+namespace OneClx\SiteBuilder\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
