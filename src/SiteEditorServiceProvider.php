@@ -18,10 +18,6 @@ class SiteEditorServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('csrf', \OneClx\SiteBuilder\Http\Middleware\VerifyCsrfTokenMiddleware::class);
 
         $this->publishes([
-            __DIR__ . '/Views/siteEditor' => base_path('resources/views/vendor/siteEditor'),
-        ]);
-
-        $this->publishes([
             __DIR__ . '/assets' => public_path('vendor/site-editor'),
         ], 'public');
     }
