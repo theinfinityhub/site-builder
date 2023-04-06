@@ -13,9 +13,9 @@ class SiteEditorServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->make('Kavi\SiteEditor\Http\Controllers\SiteEditorController');
+        $this->app->make('1clx\SiteBuilder\Http\Controllers\SiteEditorController');
         $this->loadViewsFrom(__DIR__ . '/Views', 'editor');
-        $this->app['router']->aliasMiddleware('csrf', \Kavi\SiteEditor\Http\Middleware\VerifyCsrfTokenMiddleware::class);
+        $this->app['router']->aliasMiddleware('csrf', \1clx\SiteBuilder\Http\Middleware\VerifyCsrfTokenMiddleware::class);
 
         $this->publishes([
             __DIR__ . '/Views/siteEditor' => base_path('resources/views/vendor/siteEditor'),
@@ -30,7 +30,7 @@ class SiteEditorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/assets' => public_path('vendor/site-editor'),
         ], 'public');
-        
+
         Route::prefix('pcx/editor')->group(__DIR__.'/routes/editor.php');
     }
 }
