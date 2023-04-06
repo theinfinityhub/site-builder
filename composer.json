@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "1clx\\SiteEditor\\": "src/"
+            "1clx\\SiteBuilder\\": "src/"
         }
     },
     "authors": [
