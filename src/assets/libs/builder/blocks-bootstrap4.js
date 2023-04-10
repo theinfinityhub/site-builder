@@ -22,12 +22,12 @@ Vvveb.BlocksGroup['Bootstrap'] =[
     "bootstrap4/product-card", 
     "bootstrap4/user-online", 
     "bootstrap4/our-team", 
-    "bootstrap4/login-form", 
+    // "bootstrap4/login-form", 
     "bootstrap4/about-team", 
     "bootstrap4/pricing-1", 
     // "bootstrap4/loading-circle", 
     "bootstrap4/block-quote", 
-    "bootstrap4/subscribe-newsletter"
+    // "bootstrap4/subscribe-newsletter"
 ];
 
 
