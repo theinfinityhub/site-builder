@@ -27,6 +27,6 @@ class SiteEditorServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Route::prefix('pcx/editor')->group(__DIR__.'/routes/editor.php');
+        Route::prefix('pcx/editor')->as('editor.')->group(__DIR__.'/routes/editor.php');
     }
 }

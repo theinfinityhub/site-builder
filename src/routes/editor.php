@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 use OneClx\SiteBuilder\Http\Controllers\SiteEditorController;
 
 
-Route::middleware(['web', 'csrf', 'role:pcx', 'editor'])->controller(SiteEditorController::class)->group(function () {
-    Route::get('{business}', 'editor');
-    Route::get('business/{business}', 'business');
-    Route::post('upload/{business}', 'upload');
-    Route::post('save/{business}', 'save');
-    Route::get('public/scan/{business}', 'scan');
+Route::middleware(['web', 'csrf', 'verified', 'role:pcx'])->controller(SiteEditorController::class)->group(function () {
+    Route::get('{business}', 'editor')->name('editor');
+    Route::get('business', 'business')->name('index');
+    Route::post('upload', 'upload')->name('upload');
+    Route::post('save', 'save')->name('save');
+    Route::get('public/scan', 'scan')->name('scan');
+    Route::post('reset', 'reset')->name('reset');
 });

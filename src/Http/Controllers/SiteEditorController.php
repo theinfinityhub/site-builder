@@ -14,7 +14,7 @@ class SiteEditorController extends Controller
         return view('editor::editor', compact('business'));
     }
 
-    public function upload(Request $request, $business)
+    public function upload(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:jpg,jpeg,png,svg|max:5120',
@@ -25,14 +25,14 @@ class SiteEditorController extends Controller
         }
 
         $fileName = time() . rand() . '.' . $request->file->extension();
-        $request->file->storeAs("site-editor/" . $business, $fileName, 'public');
+        $request->file->storeAs("site-editor/" . auth()->user()->business()->first()->slug, $fileName, 'public');
 
         return $fileName;
     }
 
-    public function scan(Request $request, $business)
+    public function scan(Request $request)
     {
-        $mediaPath = $request->input('mediaPath', public_path('storage/site-editor/' . $business));
+        $mediaPath = $request->input('mediaPath', public_path('storage/site-editor/' . auth()->user()->business()->first()->slug));
 
         $response = $this->scanDirectory($mediaPath);
 
@@ -72,7 +72,7 @@ class SiteEditorController extends Controller
         return $files;
     }
 
-    public function save(Request $request, $business)
+    public function save(Request $request)
     {
         $html = $this->sanitizeFileName($request->input('html'));
 
@@ -86,7 +86,7 @@ class SiteEditorController extends Controller
             ]
         );
 
-        return "File saved <a href='/$business' target='_blank'>$business</a> ;)";
+        return "File saved <a href='/{$user->slug}' target='_blank'>{$user->slug}</a> ;)";
     }
 
     private function sanitizeFileName($file)
@@ -94,5 +94,13 @@ class SiteEditorController extends Controller
         //sanitize, remove double dot .. and remove get parameters if any
         $file = preg_replace('@\?.*$@', '', preg_replace('@\.{2,}@', '', preg_replace('@[^\/\\a-zA-Z0-9{}\-\._]@', '', $file)));
         return $file;
+    }
+
+    public function reset(Request $request)
+    {
+        $user = auth()->user()->business()->first();
+        $user->site_editor()->delete();
+
+        return redirect()->back();
     }
 }

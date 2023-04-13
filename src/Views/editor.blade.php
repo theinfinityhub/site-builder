@@ -77,9 +77,18 @@
             </div>
 
             <div class="btn-group me-3 float-end" role="group">
-                <button class="btn btn-primary btn-icon" title="Export (Ctrl + E)" id="save-btn"
-                    data-vvveb-action="saveAjax" data-vvveb-url="/pcx/editor/save/{{ $business }}"
-                    data-v-vvveb-shortcut="ctrl+e">
+                <a class="btn btn-primary btn-icon" title="Back to dashboard" href="/pcx/home">
+                    <i class="la la-chevron-left"></i> <span data-v-gettext>Back</span>
+                </a>
+                <a class="btn btn-primary btn-icon" title="Reset your webpage" href="javascript:void(0)"
+                    onclick="if(confirm('Have you reset your webpage?') == true){document.getElementById('resetWebPage').submit(); }">
+                    <i class="la la-trash-restore"></i> <span data-v-gettext>Reset page</span>
+                </a>
+                <form id="resetWebPage" action="{{ route('editor.reset') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+                <button class="btn btn-primary btn-icon" title="Save Page" id="save-btn" data-vvveb-action="saveAjax"
+                    data-vvveb-url="{{ route('editor.save') }}">
                     <i class="la la-save"></i> <span data-v-gettext>Save page</span>
                 </button>
             </div>
@@ -1521,9 +1530,9 @@
         window.mediaPath = "/vendor/kavi/site-editor/src/assets/media";
 		//Vvveb.themeBaseUrl = 'demo/landing/';
         Vvveb.business = '{{ $business }}';
-        Vvveb.upload = '/pcx/editor/upload/' + Vvveb.business;
+        Vvveb.upload = "{{ route('editor.upload') }}";
 		Vvveb.mediaPath = '/storage/site-editor/' + Vvveb.business;
-		Vvveb.scanPath = '/pcx/editor/public/scan/' + Vvveb.business;
+		Vvveb.scanPath = "{{ route('editor.scan') }}";
     </script>
     <script src="{{ url('vendor/site-editor/libs/media/media.js') }}"></script>
     <script src="{{ url('vendor/site-editor/libs/media/openverse.js') }}"></script>
