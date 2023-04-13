@@ -86,6 +86,7 @@
                 </a>
                 <form id="resetWebPage" action="{{ route('editor.reset') }}" method="POST" class="d-none">
                     @csrf
+                    @method('DELETE')
                 </form>
                 <button class="btn btn-primary btn-icon" title="Save Page" id="save-btn" data-vvveb-action="saveAjax"
                     data-vvveb-url="{{ route('editor.save') }}">

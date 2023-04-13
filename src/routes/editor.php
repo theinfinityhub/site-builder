@@ -10,5 +10,5 @@ Route::middleware(['web', 'csrf', 'verified', 'role:pcx'])->controller(SiteEdito
     Route::post('upload', 'upload')->name('upload');
     Route::post('save', 'save')->name('save');
     Route::get('public/scan', 'scan')->name('scan');
-    Route::post('reset', 'reset')->name('reset');
+    Route::delete('reset', 'reset')->name('reset');
 });
