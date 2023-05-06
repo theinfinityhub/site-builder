@@ -17,177 +17,246 @@ https://github.com/givanz/VvvebJs
 */
 
 Vvveb.ComponentsGroup['Widgets'] = ["widgets/googlemaps", "widgets/video", "widgets/chartjs", "widgets/facebookpage", "widgets/paypal", "widgets/instagram", "widgets/twitter"/*, "widgets/facebookcomments"*/];
+$(document).ready(function () {
+    setTimeout(function () {
+        // Select the iframe element itself
+        var iframe = $('#iframe1');
 
+        // Access the contents of the iframe as a jQuery object
+        var iframeContents = iframe.contents();
+
+        // Get the URL string
+        var url = iframeContents.find('div[data-component-maps] iframe').attr('src');
+
+        // Parse the URL string into a URL object
+        var urlObject = new URL(url);
+
+        // Get the value of the "q" parameter
+        mapPath = urlObject.searchParams.get('q');
+
+        Vvveb.Components.extend("_base", "widgets/googlemaps", {
+            name: "Google Maps",
+            attributes: ["data-component-maps"],
+            image: "icons/map.svg",
+            dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/maps.png">',
+            html: '<div data-component-maps style="min-height:240px;min-width:240px;position:relative"><iframe frameborder="0" src="https://maps.google.com/maps?&z=1&t=q&output=embed" width="100" height="100" style="width:100%;height:100%;left:0px;pointer-events:none"></iframe></div>',
+            resizable: true,//show select box resize handlers
+            resizeMode: "css",
+
+
+            //url parameters
+            z: 3, //zoom
+            q: mapPath,//location
+            t: 'q', //map type q = roadmap, w = satellite
+
+            onChange: function (node, property, value) {
+                map_iframe = jQuery('iframe', node);
+
+                this[property.key] = value;
+
+                mapurl = 'https://maps.google.com/maps?&q=' + this.q + '&z=' + this.z + '&t=' + this.t + '&output=embed';
+
+                map_iframe.attr("src", mapurl);
+
+                return node;
+            },
+
+            properties: [{
+                name: "Address",
+                key: "q",
+                inputtype: TextInput
+            },
+            {
+                name: "Map type",
+                key: "t",
+                inputtype: SelectInput,
+                data: {
+                    options: [{
+                        value: "q",
+                        text: "Roadmap"
+                    }, {
+                        value: "w",
+                        text: "Satellite"
+                    }]
+                },
+            },
+            {
+                name: "Zoom",
+                key: "z",
+                inputtype: RangeInput,
+                data: {
+                    max: 20, //max zoom level
+                    min: 1,
+                    step: 1
+                },
+            }]
+        });
+    }, 5000);
+});
 Vvveb.Components.extend("_base", "widgets/googlemaps", {
     name: "Google Maps",
     attributes: ["data-component-maps"],
     image: "icons/map.svg",
     dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/maps.png">',
     html: '<div data-component-maps style="min-height:240px;min-width:240px;position:relative"><iframe frameborder="0" src="https://maps.google.com/maps?&z=1&t=q&output=embed" width="100" height="100" style="width:100%;height:100%;left:0px;pointer-events:none"></iframe></div>',
-    resizable:true,//show select box resize handlers
-    resizeMode:"css",
-    
-    
+    resizable: true,//show select box resize handlers
+    resizeMode: "css",
+
+
     //url parameters
-    z:3, //zoom
-    q:'Paris',//location
+    z: 3, //zoom
+    q: mapPath,//location
     t: 'q', //map type q = roadmap, w = satellite
-    
-    onChange: function (node, property, value)
-    {
-		map_iframe = jQuery('iframe', node);
-		
-		this[property.key] = value;
-		
-		mapurl = 'https://maps.google.com/maps?&q=' + this.q + '&z=' + this.z + '&t=' + this.t + '&output=embed';
-		
-		map_iframe.attr("src",mapurl);
-		
-		return node;
-	},
+
+    onChange: function (node, property, value) {
+        map_iframe = jQuery('iframe', node);
+
+        this[property.key] = value;
+
+        mapurl = 'https://maps.google.com/maps?&q=' + this.q + '&z=' + this.z + '&t=' + this.t + '&output=embed';
+
+        map_iframe.attr("src", mapurl);
+
+        return node;
+    },
 
     properties: [{
         name: "Address",
         key: "q",
         inputtype: TextInput
-    }, 
-	{
+    },
+    {
         name: "Map type",
         key: "t",
         inputtype: SelectInput,
-        data:{
-			options: [{
+        data: {
+            options: [{
                 value: "q",
                 text: "Roadmap"
             }, {
                 value: "w",
                 text: "Satellite"
             }]
-       },
+        },
     },
     {
         name: "Zoom",
         key: "z",
         inputtype: RangeInput,
-        data:{
-			max: 20, //max zoom level
-			min:1,
-			step:1
-       },
-	}]
+        data: {
+            max: 20, //max zoom level
+            min: 1,
+            step: 1
+        },
+    }]
 });
-
 Vvveb.Components.extend("_base", "widgets/video", {
     name: "Video",
     attributes: ["data-component-video"],
     image: "icons/video.svg",
     dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/video.svg" width="100" height="100">', //use image for drag and swap with iframe on drop for drag performance
     html: '<div data-component-video style="min-height:240px;min-width:240px;position:relative"><iframe frameborder="0" src="https://www.youtube.com/embed/M7lc1UVf-VE" style="width:100%;height:100%;position:absolute;left:0px;pointer-events:none"></iframe></div>',
-    
-    
+
+
     //url parameters set with onChange
-    t:'y',//video type
-    video_id:'',//video id
+    t: 'y',//video type
+    video_id: '',//video id
     url: '', //html5 video src
     autoplay: false,
     controls: false,
     loop: false,
 
-	init: function (node)
-	{
-		iframe = jQuery('iframe', node);
-		video = jQuery('video', node);
-		
-		$("#right-panel [data-key=url]").hide();
-		
-		//check if html5
-		if (video.length) 
-		{
-			this.url = video.src;
-		} else if (iframe.length) //vimeo or youtube
-		{
-			src = iframe.attr("src");
+    init: function (node) {
+        iframe = jQuery('iframe', node);
+        video = jQuery('video', node);
 
-			if (src && src.indexOf("youtube"))//youtube
-			{
-				this.video_id = src.match(/youtube.com\/embed\/([^$\?]*)/)[1];
-			} else if (src && src.indexOf("vimeo"))//youtube
-			{
-				this.video_id = src.match(/vimeo.com\/video\/([^$\?]*)/)[1];
-			}
-		}
-		
-		$("#right-panel input[name=video_id]").val(this.video_id);
-		$("#right-panel input[name=url]").val(this.url);
-	},
-	
-	onChange: function (node, property, value)
-	{
-		this[property.key] = value;
+        $("#right-panel [data-key=url]").hide();
 
-		//if (property.key == "t")
-		{
-			switch (this.t)
-			{
-				case 'y':
-					$("#right-panel [data-key=video_id]").show();
-					$("#right-panel [data-key=url]").hide();
-					newnode = $(`<div data-component-video>
+        //check if html5
+        if (video.length) {
+            this.url = video.src;
+        } else if (iframe.length) //vimeo or youtube
+        {
+            src = iframe.attr("src");
+
+            if (src && src.indexOf("youtube"))//youtube
+            {
+                this.video_id = src.match(/youtube.com\/embed\/([^$\?]*)/)[1];
+            } else if (src && src.indexOf("vimeo"))//youtube
+            {
+                this.video_id = src.match(/vimeo.com\/video\/([^$\?]*)/)[1];
+            }
+        }
+
+        $("#right-panel input[name=video_id]").val(this.video_id);
+        $("#right-panel input[name=url]").val(this.url);
+    },
+
+    onChange: function (node, property, value) {
+        this[property.key] = value;
+
+        //if (property.key == "t")
+        {
+            switch (this.t) {
+                case 'y':
+                    $("#right-panel [data-key=video_id]").show();
+                    $("#right-panel [data-key=url]").hide();
+                    newnode = $(`<div data-component-video>
 									<iframe 
 										src="https://www.youtube.com/embed/${this.video_id}?&amp;autoplay=${this.autoplay}&amp;controls=${this.controls}&amp;loop=${this.loop}" allowfullscreen="true" 
 										style="height: 100%; width: 100%;" frameborder="0">
 									</iframe>
 								</div>`);
-				break;
-				case 'v':
-					$("#right-panel [data-key=video_id]").show();
-					$("#right-panel [data-key=url]").hide();
-					newnode = $(`<div data-component-video>
+                    break;
+                case 'v':
+                    $("#right-panel [data-key=video_id]").show();
+                    $("#right-panel [data-key=url]").hide();
+                    newnode = $(`<div data-component-video>
 									<iframe 
 										src="https://player.vimeo.com/video/${this.video_id}?&amp;autoplay=${this.autoplay}&amp;controls=${this.controls}&amp;loop=${this.loop}" allowfullscreen="true" 
 										style="height: 100%; width: 100%;" frameborder="0">
 									</iframe>
 								</div>`);
-				break;
-				case 'h':
-					$("#right-panel [data-key=video_id]").hide();
-					$("#right-panel [data-key=url]").show();
-					newnode = $('<div data-component-video><video src="' + this.url + '" ' + (this.autoplay?' autoplay ':'') + (this.controls?' controls ':'') + (this.loop?' loop ':'') + ' style="height: 100%; width: 100%;"></video></div>');
-				break;
-			}
-			
-			node.replaceWith(newnode);
-			return newnode;
-		}
-		return node;
-	},	
-	
+                    break;
+                case 'h':
+                    $("#right-panel [data-key=video_id]").hide();
+                    $("#right-panel [data-key=url]").show();
+                    newnode = $('<div data-component-video><video src="' + this.url + '" ' + (this.autoplay ? ' autoplay ' : '') + (this.controls ? ' controls ' : '') + (this.loop ? ' loop ' : '') + ' style="height: 100%; width: 100%;"></video></div>');
+                    break;
+            }
+
+            node.replaceWith(newnode);
+            return newnode;
+        }
+        return node;
+    },
+
     properties: [{
         name: "Provider",
         key: "t",
         inputtype: SelectInput,
-        data:{
-			options: [{
+        data: {
+            options: [{
                 text: "Youtube",
                 value: "y"
             }, {
                 text: "Vimeo",
                 value: "v"
-            },{
+            }, {
                 text: "HTML5",
                 value: "h"
             }]
-       },
-	 },	       
-     {
+        },
+    },
+    {
         name: "Video id",
         key: "video_id",
         inputtype: TextInput,
-    },{
+    }, {
         name: "Url",
         key: "url",
         inputtype: TextInput
-    },{
+    }, {
         name: "Autoplay",
         key: "autoplay",
         inputtype: ToggleInput,
@@ -195,9 +264,9 @@ Vvveb.Components.extend("_base", "widgets/video", {
             on: "true",
             off: "false"
         },
-        inline:true,
-        col:4,
-    },{
+        inline: true,
+        col: 4,
+    }, {
         name: "Controls",
         key: "controls",
         inputtype: ToggleInput,
@@ -205,9 +274,9 @@ Vvveb.Components.extend("_base", "widgets/video", {
             on: "true",
             off: "false"
         },
-        inline:true,
-        col:4,
-    },{
+        inline: true,
+        col: 4,
+    }, {
         name: "Loop",
         key: "loop",
         inputtype: ToggleInput,
@@ -215,8 +284,8 @@ Vvveb.Components.extend("_base", "widgets/video", {
             on: "true",
             off: "false"
         },
-        inline:true,
-        col:4,
+        inline: true,
+        col: 4,
     }]
 });
 
@@ -246,33 +315,33 @@ Vvveb.Components.extend("_base", "widgets/facebookcomments", {
         name: "Href",
         key: "business",
         htmlAttr: "data-href",
-        child:".fb-comments",
+        child: ".fb-comments",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Item name",
         key: "item_name",
         htmlAttr: "data-numposts",
-        child:".fb-comments",
+        child: ".fb-comments",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Color scheme",
         key: "colorscheme",
         htmlAttr: "data-colorscheme",
-        child:".fb-comments",
+        child: ".fb-comments",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Order by",
         key: "order-by",
         htmlAttr: "data-order-by",
-        child:".fb-comments",
+        child: ".fb-comments",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Currency code",
         key: "width",
         htmlAttr: "data-width",
-        child:".fb-comments",
+        child: ".fb-comments",
         inputtype: TextInput
-	}]
+    }]
 });
 
 Vvveb.Components.extend("_base", "widgets/instagram", {
@@ -352,35 +421,35 @@ Vvveb.Components.extend("_base", "widgets/paypal", {
         name: "Email",
         key: "business",
         htmlAttr: "value",
-        child:"input[name='business']",
+        child: "input[name='business']",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Item name",
         key: "item_name",
         htmlAttr: "value",
-        child:"input[name='item_name']",
+        child: "input[name='item_name']",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Item number",
         key: "item_number",
         htmlAttr: "value",
-        child:"input[name='item_number']",
+        child: "input[name='item_number']",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Currency code",
         key: "currency_code",
         htmlAttr: "value",
-        child:"input[name='currency_code']",
+        child: "input[name='currency_code']",
         inputtype: TextInput
-	}],
+    }],
 });
-    
+
 Vvveb.Components.extend("_base", "widgets/facebookpage", {
     name: "Facebook Page Plugin",
     attributes: ["data-component-facebookpage"],
     image: "icons/facebook.svg",
     dropHtml: '<img src="' + Vvveb.baseUrl + 'icons/facebook.png">',
-	html: '<div data-component-facebookpage><div class="fb-page" data-href="https://www.facebook.com/facebook" data-appId="100526183620976" data-tabs="timeline" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div>\
+    html: '<div data-component-facebookpage><div class="fb-page" data-href="https://www.facebook.com/facebook" data-appId="100526183620976" data-tabs="timeline" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div>\
 			<div id="fb-root"></div>\
 			<script>(function(d, s, id) {\
 			  var appId = document.getElementsByClassName("fb-page")[0].dataset.appid;\
@@ -396,65 +465,65 @@ Vvveb.Components.extend("_base", "widgets/facebookpage", {
         name: "Small header",
         key: "small-header",
         htmlAttr: "data-small-header",
-        child:".fb-page",
+        child: ".fb-page",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Adapt container width",
         key: "adapt-container-width",
         htmlAttr: "data-adapt-container-width",
-        child:".fb-page",
+        child: ".fb-page",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Hide cover",
         key: "hide-cover",
         htmlAttr: "data-hide-cover",
-        child:".fb-page",
+        child: ".fb-page",
         inputtype: TextInput
-    },{		
+    }, {
         name: "Show facepile",
         key: "show-facepile",
         htmlAttr: "data-show-facepile",
-        child:".fb-page",
+        child: ".fb-page",
         inputtype: TextInput
-    },{		
+    }, {
         name: "App Id",
         key: "appid",
         htmlAttr: "data-appId",
-        child:".fb-page",
+        child: ".fb-page",
         inputtype: TextInput
-	}],
-   onChange: function(node, input, value, component) {
-	   //console.log(component.html);
-	   //console.log(this.html);
-	   
-	   var newElement = $(this.html);
-	   newElement.find(".fb-page").attr(input.htmlAttr, value);
-	   
-	   console.log(node.parent());
-	   console.log(node.parent().html());
+    }],
+    onChange: function (node, input, value, component) {
+        //console.log(component.html);
+        //console.log(this.html);
+
+        var newElement = $(this.html);
+        newElement.find(".fb-page").attr(input.htmlAttr, value);
+
+        console.log(node.parent());
+        console.log(node.parent().html());
 
 
-	   $("[data-fbcssmodules]", Vvveb.Builder.frameHead).remove();
-	   $("[data-fbcssmodules]", Vvveb.Builder.frameBody).remove();
-	   $("script[src^='https://connect.facebook.net']", Vvveb.Builder.frameHead).remove();
+        $("[data-fbcssmodules]", Vvveb.Builder.frameHead).remove();
+        $("[data-fbcssmodules]", Vvveb.Builder.frameBody).remove();
+        $("script[src^='https://connect.facebook.net']", Vvveb.Builder.frameHead).remove();
 
 
-	   node.parent().html(newElement.html());
+        node.parent().html(newElement.html());
 
-	   console.log(newElement);
+        console.log(newElement);
 
 
-	   console.log(newElement.html());
+        console.log(newElement.html());
 
-	   return newElement;
-	}	
+        return newElement;
+    }
 });
-    
+
 Vvveb.Components.extend("_base", "widgets/chartjs", {
     name: "Chart.js",
     attributes: ["data-component-chartjs"],
     image: "icons/chart.svg",
-	dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/chart.svg">',
+    dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/chart.svg">',
     html: '<div data-component-chartjs class="chartjs" data-chart=\'{\
 			"type": "line",\
 			"data": {\
@@ -471,11 +540,11 @@ Vvveb.Components.extend("_base", "widgets/chartjs", {
 			}}\' style="min-height:240px;min-width:240px;width:100%;height:100%;position:relative">\
 			  <canvas></canvas>\
 			</div>',
-	chartjs: null,
-	ctx: null,
-	node: null,
+    chartjs: null,
+    ctx: null,
+    node: null,
 
-	config: {/*
+    config: {/*
 			type: 'line',
 			data: {
 				labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -489,17 +558,15 @@ Vvveb.Components.extend("_base", "widgets/chartjs", {
 					borderColor: 'rgba(54, 162, 235, 0.2)',
 				}]
 			},*/
-	},		
+    },
 
-	dragStart: function (node)
-	{
-		//check if chartjs is included and if not add it when drag starts to allow the script to load
-		body = Vvveb.Builder.frameBody;
-		
-		if ($("#chartjs-script", body).length == 0)
-		{
-			$(body).append('<script id="chartjs-script" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>');
-			$(body).append('<script>\
+    dragStart: function (node) {
+        //check if chartjs is included and if not add it when drag starts to allow the script to load
+        body = Vvveb.Builder.frameBody;
+
+        if ($("#chartjs-script", body).length == 0) {
+            $(body).append('<script id="chartjs-script" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>');
+            $(body).append('<script>\
 				$(document).ready(function() {\
 					$(".chartjs").each(function () {\
 						ctx = $("canvas", this).get(0).getContext("2d");\
@@ -508,77 +575,74 @@ Vvveb.Components.extend("_base", "widgets/chartjs", {
 					});\
 				\});\
 			  </script>');
-		}
-		
-		return node;
-	},
-	
+        }
 
-	drawChart: function ()
-	{
-		if (this.chartjs != null) this.chartjs.destroy();
-		this.node.dataset.chart = JSON.stringify(this.config);
-		
-		config = Object.assign({}, this.config);//avoid passing by reference to avoid chartjs to fill the object
-		this.chartjs = new Chart(this.ctx, config);
-	},
-	
-	init: function (node)
-	{
-		this.node = node;
-		this.ctx = $("canvas", node).get(0).getContext("2d");
-		this.config = JSON.parse(node.dataset.chart);
-		this.drawChart();
+        return node;
+    },
 
-		return node;
-	},
-  
-  
-	beforeInit: function (node)
-	{
-		return node;
-	},
-    
+
+    drawChart: function () {
+        if (this.chartjs != null) this.chartjs.destroy();
+        this.node.dataset.chart = JSON.stringify(this.config);
+
+        config = Object.assign({}, this.config);//avoid passing by reference to avoid chartjs to fill the object
+        this.chartjs = new Chart(this.ctx, config);
+    },
+
+    init: function (node) {
+        this.node = node;
+        this.ctx = $("canvas", node).get(0).getContext("2d");
+        this.config = JSON.parse(node.dataset.chart);
+        this.drawChart();
+
+        return node;
+    },
+
+
+    beforeInit: function (node) {
+        return node;
+    },
+
     properties: [
-	{
-        name: "Type",
-        key: "type",
-        inputtype: SelectInput,
-        data:{
-			options: [{
-                text: "Line",
-                value: "line"
-            }, {
-                text: "Bar",
-                value: "bar"
-            }, {
-                text: "Pie",
-                value: "pie"
-            }, {
-                text: "Doughnut",
-                value: "doughnut"
-            }, {
-                text: "Polar Area",
-                value: "polarArea"
-            }, {
-                text: "Bubble",
-                value: "bubble"
-            }, {
-                text: "Scatter",
-                value: "scatter"
-            },{
-                text: "Radar",
-                value: "radar"
-            }]
-       },
-		init: function(node) {
-			return JSON.parse(node.dataset.chart).type;
-		},
-       onChange: function(node, value, input, component) {
-		   component.config.type = value;
-		   component.drawChart();
-		   
-		   return node;
-		}
-	 }]
+        {
+            name: "Type",
+            key: "type",
+            inputtype: SelectInput,
+            data: {
+                options: [{
+                    text: "Line",
+                    value: "line"
+                }, {
+                    text: "Bar",
+                    value: "bar"
+                }, {
+                    text: "Pie",
+                    value: "pie"
+                }, {
+                    text: "Doughnut",
+                    value: "doughnut"
+                }, {
+                    text: "Polar Area",
+                    value: "polarArea"
+                }, {
+                    text: "Bubble",
+                    value: "bubble"
+                }, {
+                    text: "Scatter",
+                    value: "scatter"
+                }, {
+                    text: "Radar",
+                    value: "radar"
+                }]
+            },
+            init: function (node) {
+                return JSON.parse(node.dataset.chart).type;
+            },
+            onChange: function (node, value, input, component) {
+                component.config.type = value;
+                component.drawChart();
+
+                return node;
+            }
+        }]
 });

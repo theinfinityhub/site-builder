@@ -1534,6 +1534,7 @@
         Vvveb.upload = "{{ route('editor.upload') }}";
 		Vvveb.mediaPath = '/storage/site-editor/' + Vvveb.business;
 		Vvveb.scanPath = "{{ route('editor.scan') }}";
+        var mapPath = 'InfinityHub, Perundurai Road, opp. to Sakthi mahal, EB Officers Colony, Erode, Tamil Nadu';
     </script>
     <script src="{{ url('vendor/site-editor/libs/media/media.js') }}"></script>
     <script src="{{ url('vendor/site-editor/libs/media/openverse.js') }}"></script>
