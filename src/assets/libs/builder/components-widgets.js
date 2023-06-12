@@ -17,82 +17,80 @@ https://github.com/givanz/VvvebJs
 */
 
 Vvveb.ComponentsGroup['Widgets'] = ["widgets/googlemaps", "widgets/video", "widgets/chartjs", "widgets/facebookpage", "widgets/paypal", "widgets/instagram", "widgets/twitter"/*, "widgets/facebookcomments"*/];
-$(document).ready(function () {
-    setTimeout(function () {
-        // Select the iframe element itself
-        var iframe = $('#iframe1');
+window.onload = function() {
+    // Select the iframe element itself
+    var iframe = $('#iframe1');
 
-        // Access the contents of the iframe as a jQuery object
-        var iframeContents = iframe.contents();
+    // Access the contents of the iframe as a jQuery object
+    var iframeContents = iframe.contents();
 
-        // Get the URL string
-        var url = iframeContents.find('div[data-component-maps] iframe').attr('src');
+    // Get the URL string
+    var url = iframeContents.find('div[data-component-maps] iframe').attr('src');
 
-        // Parse the URL string into a URL object
-        var urlObject = new URL(url);
+    // Parse the URL string into a URL object
+    var urlObject = new URL(url);
 
-        // Get the value of the "q" parameter
-        mapPath = urlObject.searchParams.get('q');
+    // Get the value of the "q" parameter
+    mapPath = urlObject.searchParams.get('q');
 
-        Vvveb.Components.extend("_base", "widgets/googlemaps", {
-            name: "Google Maps",
-            attributes: ["data-component-maps"],
-            image: "icons/map.svg",
-            dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/maps.png">',
-            html: '<div data-component-maps style="min-height:240px;min-width:240px;position:relative"><iframe frameborder="0" src="https://maps.google.com/maps?&z=1&t=q&output=embed" width="100" height="100" style="width:100%;height:100%;left:0px;pointer-events:none"></iframe></div>',
-            resizable: true,//show select box resize handlers
-            resizeMode: "css",
+    Vvveb.Components.extend("_base", "widgets/googlemaps", {
+        name: "Google Maps",
+        attributes: ["data-component-maps"],
+        image: "icons/map.svg",
+        dragHtml: '<img src="' + Vvveb.baseUrl + 'icons/maps.png">',
+        html: '<div data-component-maps style="min-height:240px;min-width:240px;position:relative"><iframe frameborder="0" src="https://maps.google.com/maps?&z=1&t=q&output=embed" width="100" height="100" style="width:100%;height:100%;left:0px;pointer-events:none"></iframe></div>',
+        resizable: true,//show select box resize handlers
+        resizeMode: "css",
 
 
-            //url parameters
-            z: 3, //zoom
-            q: mapPath,//location
-            t: 'q', //map type q = roadmap, w = satellite
+        //url parameters
+        z: 3, //zoom
+        q: mapPath,//location
+        t: 'q', //map type q = roadmap, w = satellite
 
-            onChange: function (node, property, value) {
-                map_iframe = jQuery('iframe', node);
+        onChange: function (node, property, value) {
+            map_iframe = jQuery('iframe', node);
 
-                this[property.key] = value;
+            this[property.key] = value;
 
-                mapurl = 'https://maps.google.com/maps?&q=' + this.q + '&z=' + this.z + '&t=' + this.t + '&output=embed';
+            mapurl = 'https://maps.google.com/maps?&q=' + this.q + '&z=' + this.z + '&t=' + this.t + '&output=embed';
 
-                map_iframe.attr("src", mapurl);
+            map_iframe.attr("src", mapurl);
 
-                return node;
+            return node;
+        },
+
+        properties: [{
+            name: "Address",
+            key: "q",
+            inputtype: TextInput
+        },
+        {
+            name: "Map type",
+            key: "t",
+            inputtype: SelectInput,
+            data: {
+                options: [{
+                    value: "q",
+                    text: "Roadmap"
+                }, {
+                    value: "w",
+                    text: "Satellite"
+                }]
             },
-
-            properties: [{
-                name: "Address",
-                key: "q",
-                inputtype: TextInput
+        },
+        {
+            name: "Zoom",
+            key: "z",
+            inputtype: RangeInput,
+            data: {
+                max: 20, //max zoom level
+                min: 1,
+                step: 1
             },
-            {
-                name: "Map type",
-                key: "t",
-                inputtype: SelectInput,
-                data: {
-                    options: [{
-                        value: "q",
-                        text: "Roadmap"
-                    }, {
-                        value: "w",
-                        text: "Satellite"
-                    }]
-                },
-            },
-            {
-                name: "Zoom",
-                key: "z",
-                inputtype: RangeInput,
-                data: {
-                    max: 20, //max zoom level
-                    min: 1,
-                    step: 1
-                },
-            }]
-        });
-    }, 5000);
-});
+        }]
+    });
+}
 Vvveb.Components.extend("_base", "widgets/googlemaps", {
     name: "Google Maps",
     attributes: ["data-component-maps"],
