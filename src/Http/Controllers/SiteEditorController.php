@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use URL;
+use App\Models\Business;
 
 class SiteEditorController extends Controller
 {
@@ -71,22 +73,34 @@ class SiteEditorController extends Controller
 
         return $files;
     }
-
+    
     public function save(Request $request)
     {
         $html = $this->sanitizeFileName($request->input('html'));
-
-        $user = auth()->user()->business()->first();
-
-        $user->site_editor()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            [
-                'user_id' => auth()->id(),
-                'content' => $html
-            ]
-        );
-
-        return "File saved <a href='/{$user->slug}' target='_blank'>{$user->slug}</a> ;)";
+       
+        if(auth()->user()->roles['0']->name == 'super-admin'){
+                $currenturl = url()->previous();
+                $business = explode("/", $currenturl); 
+                $business_name =  $business[5];
+                $user = Business::where("slug","=", $business_name)->first();
+                $user->site_editor()->updateOrCreate(
+                    ['user_id' => $user->_id],
+                    [
+                        'user_id' => $user->_id,
+                        'content' => $html
+                    ]
+                );
+        }else{
+                $user = auth()->user()->business()->first();
+                $user->site_editor()->updateOrCreate(
+                    ['user_id' => auth()->id()],
+                    [
+                        'user_id' => auth()->id(),
+                        'content' => $html
+                    ]
+                );
+        }
+        return "Page was successfully saved! <a href='/{$user->slug}' target='_blank'>{$user->slug}</a> ;)";
     }
 
     private function sanitizeFileName($file)
@@ -98,9 +112,16 @@ class SiteEditorController extends Controller
 
     public function reset(Request $request)
     {
-        $user = auth()->user()->business()->first();
+        if(auth()->user()->roles['0']->name == 'super-admin'){
+            $currenturl = url()->previous();
+            $business = explode("/", $currenturl); 
+            $business_name =  $business[5];
+            $user = Business::where("slug","=", $business_name)->first();
+        }else{
+            $user = auth()->user()->business()->first();
+        }       
+        
         $user->site_editor()->delete();
-
         return redirect()->back();
     }
 }

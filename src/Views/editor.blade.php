@@ -77,9 +77,18 @@
             </div>
 
             <div class="btn-group me-3 float-end" role="group">
-                <a class="btn btn-primary btn-icon" title="Back to dashboard" href="/pcx/home">
+                @role('pcx')
+                <a class="btn btn-primary btn-icon" title="Back to dashboard" 
+                onclick="if(confirm('Are you sure want to back?') == true){ location.href='{{ route('pcx.home') }}';    }">
                     <i class="la la-chevron-left"></i> <span data-v-gettext>Back</span>
                 </a>
+                @endrole
+                @role('super-admin')
+                <a class="btn btn-primary btn-icon" title="Back to dashboard" 
+                onclick="if(confirm('Are you sure want to back?') == true){ location.href='{{ route('super-admin.home') }}';    }">
+                    <i class="la la-chevron-left"></i> <span data-v-gettext>Back</span>
+                </a>
+                @endrole                
                 <a class="btn btn-primary btn-icon" title="Reset your webpage" href="javascript:void(0)"
                     onclick="if(confirm('Have you reset your webpage?') == true){document.getElementById('resetWebPage').submit(); }">
                     <i class="la la-trash-restore"></i> <span data-v-gettext>Reset page</span>
@@ -1403,14 +1412,18 @@
         </div>
 
         <!-- message modal-->
-        <div class="modal fade" id="message-modal" tabindex="-1" role="dialog">
+        <div class="modal fade" id="message-modal" tabindex="-1" role="dialog"
+            data-bs-backdrop="static" 
+            aria-hidden="true" 
+            aria-labelledby="message-modalLabel" 
+            tabindex="-1" >
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <p class="modal-title text-primary">
                             <img src="{{ url('vendor/site-editor/img/logo.png') }}" alt="Logo" width="80px">
                         </p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="window.location.reload()">
                             <!-- span aria-hidden="true"><small><i class="la la-times"></i></small></span -->
                         </button>
                     </div>
@@ -1419,7 +1432,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-primary">Ok</button> -->
-                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal"><i
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal" onclick="window.location.reload()"><i
                                 class="la la-times"></i> Close</button>
                     </div>
                 </div>
@@ -1616,7 +1629,7 @@
 			Vvveb.FileManager.addPages(pages);
 			//Vvveb.FileManager.loadPage("landing-page");
 			Vvveb.Breadcrumb.init();
-		});
+            });
     </script>
 </body>
 
