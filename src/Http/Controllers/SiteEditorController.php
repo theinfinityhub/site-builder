@@ -100,7 +100,7 @@ class SiteEditorController extends Controller
                     ]
                 );
         }
-        return "Page was successfully saved! <a href='/{$user->slug}' target='_blank'>{$user->slug}</a> ;)";
+        return "Page was successfully saved! <a href='/{$user->slug}'>{$user->slug}</a> ;)";
     }
 
     private function sanitizeFileName($file)
