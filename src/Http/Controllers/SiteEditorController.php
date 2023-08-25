@@ -27,7 +27,18 @@ class SiteEditorController extends Controller
         }
 
         $fileName = time() . rand() . '.' . $request->file->extension();
-        $request->file->storeAs("site-editor/" . auth()->user()->business()->first()->slug, $fileName, 'public');
+
+        /* slug get */
+        if(auth()->user()->roles['0']->name == 'super-admin'){
+            $currenturl = url()->previous();
+            $business = explode("/", $currenturl); 
+            $business_name =  $business[5];
+            $slug = $business_name;
+        }else{
+            $slug = auth()->user()->business()->first()->slug;
+        }
+
+        $request->file->storeAs("site-editor/" .$slug , $fileName, 'public');
 
         return $fileName;
     }
